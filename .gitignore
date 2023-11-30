@@ -1,0 +1,5 @@
+Top/Data/*.txt
+Top_Working/Data/*.txt
+Utils/*.txt
+Utils/Data/*.txt
+*.autosave
