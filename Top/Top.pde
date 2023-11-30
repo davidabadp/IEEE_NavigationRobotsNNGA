@@ -32,9 +32,6 @@ int captura = 0;
 //Files
 PrintWriter weights_file[] = new PrintWriter [maxRepetitions*maxGenerations];
 PrintWriter log_file1[] = new PrintWriter [maxRepetitions];
-//PrintWriter loss_file[] = new PrintWriter [maxRepetitions];
-//PrintWriter log_file2[] = new PrintWriter [maxRepetitions];
-//PrintWriter log_file3[] = new PrintWriter [maxRepetitions];
 
 void setup(){
   n = 9;
@@ -43,9 +40,6 @@ void setup(){
   frameRate(tempo);
   
   obstacles = new ArrayList <Obstaculo>();
-  /*walle = new Robot(this, "potential_fields");
-  walle.rgb_color = color(255,0,255);
-  walle.pos.set(100,100);*/
 
   target = new Meta(20,850,330);
   map = new Mapas(3,n,m);
@@ -78,34 +72,17 @@ void setup(){
   //robots.get(0).model.creatFiles();
   for(int i = repetitions; i < (maxRepetitions); i++){
     log_file1[i] = createWriter("Data/" + "ROBOTS_" + i + ".txt");
-    //loss_file[i] = createWriter("Data/" + "LOSS_" + i + ".txt");
-    //log_file2[i] = createWriter("Data/" + "ROBOTS_OUT_" + i + ".txt");
-    //log_file3[i] = createWriter("Data/" + "ROBOTS_TOP_" + i + ".txt");
+    //loss
     log_file1[i].println("Generation,num_target,num_obs,num_robotstop,dist2obj_target,dist_target,ener_target,dist2obj_obs,dist_obs,ener_obs,dist2obj_null,dist_null,ener_null,best_loss,global_loss");
-    //loss_file[i].println("Generation, best_loss");
-    //log_file2[i].println("Generation,num_obs");
-    //log_file3[i].println("Generation,porcentaje_robots_top");
   }
   for(int i = repetitions; i < (maxRepetitions*maxGenerations); i++){
-    //loss_file[i] = createWriter("Data/" + "LOSS_" + i + ".txt");
     weights_file[i] = createWriter("Data/" + "WEIGHTS_" + i + ".txt");
-    //log_file2[i] = createWriter("Data/" + "ROBOTS_OUT_" + i + ".txt");
-    //log_file3[i] = createWriter("Data/" + "ROBOTS_TOP_" + i + ".txt");
-    //loss_file[i].println("Generation, best_loss");
-    //log_file2[i].println("Generation,num_obs");
-    //log_file3[i].println("Generation,porcentaje_robots_top");
   }
 }
 
 void draw(){
   frameNumber++;
   background(200);
-  
-  //walle.draw();
-  //walle.compute_work(target,obstacles);
-  //triang.draw();
-  //line.draw();
-  //for(Obstaculo o : obstacles){o.draw();}
   
   if (next_generation){
     generation++;
@@ -138,8 +115,7 @@ void draw(){
   for (int i = nIndiv-1; i >= 0; i--){
     robots.get(i).draw();
   }
-  //walle.draw_sensors();
-  //walle.draw();
+
   target.draw();
   for(Obstaculo o : obstacles){o.draw();}
 
@@ -149,18 +125,10 @@ void draw(){
   text("Generacion: " + generation ,400,26);
   text("FPS: " + int(frameRate) ,0,12);
    
-   /*println("Walle ditancia: " + walle.distance);
-   println("Walle tiempo: " + walle.time);
-   println("Walle energia: " + walle.energy);*/
-   //println(robots.get(0).pos.x);
     for(int i = 0; i < nIndiv; i++){
       robots.get(i).compute_work(target,obstacles, frameCount);
     }
-  
-  /*walle.emulate_sensors(obstacles);
-  walle.newAcel = new Vector2D((mouseX-walle.pos.x)/width, (mouseY-walle.pos.y)/height);
-  walle.run_simulation(target,obstacles, frameCount);*/
-  
+ 
   if(frameCount % 20 == 0){
     captura++;
     saveFrame("Fotos/Generacion" + generation + "_Captura" + captura + ".png");
@@ -177,7 +145,6 @@ void draw(){
       if(robots.get(i).has_arrived){
         present = 0.0;
       }
-      //error = robots.get(i).model.compute_loss(exit);
       loss = (distancia(robots.get(i).pos, target.pos)*10) +  (robots.get(i).distance/500) + robots.get(i).loss_extra + present;
       population.individuals[i].fitness = 1/loss;
     }
@@ -256,12 +223,6 @@ void draw(){
     + dist_target + "," + ener_target + "," + dist2obj_obs + "," + dist_obs + "," + ener_obs+ "," + dist2obj_null + "," + dist_null + "," 
     + ener_null + "," + population.individuals[best].fitness + "," + global_loss);
     
-    //float [] entry1 = {robots.get(best).pos.x, robots.get(best).pos.y, target.pos.x, target.pos.y};
-    //float [] exit = {target.pos.x, target.pos.y};
-    //robots.get(best).in.setNeurons(entry1);
-    //robots.get(best).model.forward_prop();
-    //mse
-    //mse_ =  robots.get(best).model.mse( robots.get(best).model.layers.get( robots.get(best).model.layers.size()-1).neurons, exit);
     mse_ =  1/population.individuals[best].fitness;
     //accuracy
 
@@ -284,10 +245,6 @@ void draw(){
     }
     println();
   
-    //if (repetitions == 0){
-      //robots.get(repetitions).model.saveParamsLoss(generation, best, population.individuals[best].fitness);
-    //}
-    //loss_file[repetitions].println(generation + "," + population.individuals[best].fitness);
     cuenta++;
     for(int i= 0; i < population.individuals[best].chromosome_length; i++){
             weights_file[cuenta].print(population.individuals[best].chromosome[i]);
@@ -320,8 +277,6 @@ void draw(){
       }    
     
       for (int i = 0; i < elite_indivs; i++){
-        //print("best_indivs:" + best_indivs[i]);
-        //println("\tfitness:" + population.individuals[best_indivs[i]].fitness);
         child[i] = population.individuals[best_indivs[i]]; 
       }
     }
@@ -343,37 +298,11 @@ void draw(){
     
     if (generation == maxGenerations){
       if (repetitions == (maxRepetitions-1)){
-        //robots.get(repetitions).model.ParamsWeights(best, population.individuals[best].chromosome_length, population.individuals[best].chromosome);
-        //robots.get(repetitions).model.exit2();
-        /*for(int i= 0; i < population.individuals[best].chromosome_length; i++){
-            weights_file[repetitions].print(population.individuals[best].chromosome[i]);
-           if(i < (population.individuals[best].chromosome_length-1)){
-              weights_file[repetitions].print("\t");
-           }
-        }*/
         exit();//let processing carry with it's regular exit routine
       }
       else{
-        /*if(repetitions == 0){
-          robots.get(repetitions).model.ParamsWeights(best, population.individuals[best].chromosome_length, population.individuals[best].chromosome);
-          robots.get(repetitions).model.exit2();
-        }*/
-        /*for(int i= 0; i < population.individuals[best].chromosome_length; i++){
-            weights_file[repetitions].print(population.individuals[best].chromosome[i]);
-           if(i < (population.individuals[best].chromosome_length-1)){
-              weights_file[repetitions].print("\t");
-           }
-        }
-        //loss_file[repetitions].flush();
-        //loss_file[repetitions].close();
-        weights_file[repetitions].flush();
-        weights_file[repetitions].close();*/
         log_file1[repetitions].flush();
         log_file1[repetitions].close();
-        //log_file2[repetitions].flush();
-        //log_file2[repetitions].close();
-        //log_file3[repetitions].flush();
-        //log_file3[repetitions].close();
         println("Repeticion " + repetitions + " terminada.");
         repetitions ++;
         generation = 0;
@@ -388,16 +317,8 @@ void draw(){
 }
 
 void exit(){
-  //loss_file[maxRepetitions-1].flush();
-  //loss_file[maxRepetitions-1].close();
-  //weights_file[maxRepetitions-1].flush();
-  //weights_file[maxRepetitions-1].close();
   log_file1[maxRepetitions-1].flush();
   log_file1[maxRepetitions-1].close();
-  //log_file2[maxRepetitions-1].flush();
-  //log_file2[maxRepetitions-1].close();
-  //log_file3[maxRepetitions-1].flush();
-  //log_file3[maxRepetitions-1].close();
   println("Ultima repetición terminada");
   super.exit();//let processing carry with it's regular exit routine
 }

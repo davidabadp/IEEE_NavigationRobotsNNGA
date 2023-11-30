@@ -36,11 +36,7 @@ void setup(){
   size(900,600);
   frameRate(tempo);
   
-   obstacles = new ArrayList <Obstaculo>();
-  /*rect = new Rectangulo(200,120,100,400);
-  for(int i1 = 0; i1 < rect.obstacles.size(); i1++){
-     obstacles.add(rect.getObstacle(i1));
-  }*/
+  obstacles = new ArrayList <Obstaculo>();
   map = new Mapas(2,n,m);
   map.create();
   mood_navigation = "neural_networks";
@@ -48,31 +44,17 @@ void setup(){
   for(int i = 0; i < map.obs.size(); i++){
     obstacles.add(map.getObstacle(i));
   }
-  //triang = new Triangulo(50,10,90,70,20,80);
-  //line = new Recta(400,400,450,460);
-  //obstacles = new ArrayList <Obstaculo>();
-  //Obstaculo obs1 = new Obstaculo (20, 250,200);
-  //obstacles.add(obs1);
-  //Obstaculo obs2 = new Obstaculo (20, 150,200);
-  //obstacles.add(obs2);
-  //Obstaculo obs3 = new Obstaculo (20, 200,250);
-  //obstacles.add(obs3);
-  //Obstaculo obs4 = new Obstaculo (20, 200,150);
-  //obstacles.add(obs4);
-  
+
   walle = new Robot(this, mood_navigation);
   walle.pos = map.get_start_pos();
-  //walle.pos.set(50,50);
   
   target = new Meta(20,500,300);
   target.pos = map.get_target_pos();
-  //target.pos.set(750,450);
   
   if(mood_navigation == "neural_networks"){
-  walle.model.printParams();
-  walle.model.readWeights(walle.neu, walle.model);}
+    walle.model.printParams();
+    walle.model.readWeights(walle.neu, walle.model);}
   
-  //log= new Log("C:\\Users\\david\\OneDrive\\Documentos\\GitHub\\NAVEGACION_DAVID_TFG\\Top\\Data\\Datos.txt"); //Creamos el nuevo archivo
   String name = "Datos";
   log_file = createWriter("Data/" + name + ".txt");
 }
@@ -82,11 +64,8 @@ void draw(){
   tiempo=millis();
   background(200);
   
-  //rect.draw();
   target.draw();
   walle.draw();
-  //triang.draw();
-  //line.draw();
   for(Obstaculo o : obstacles){o.draw();}
   
   walle.compute_work(target,obstacles,frameCount);
@@ -111,9 +90,6 @@ void draw(){
     text("Tiempo:"+tiempoWalle,400,20); 
     text("Distancia:"+distWalle,400,30);
     text("Energia:"+enerWalle,400,40);
-    //log.write("Tiempo:"+tiempoWalle+",Distancia:"+distWalle+",Energia:"+enerWalle);
-    //log.close();  //Se cierra el archivo
-    //super.exit();
     log_file.print("Tiempo:"+tiempoWalle+",Distancia:"+distWalle+",Energia:"+enerWalle);
     log_file.println();
     log_file.println("El robot ha triunfado");
