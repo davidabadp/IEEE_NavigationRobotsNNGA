@@ -42,6 +42,7 @@ If you want to change the map, you simply have to change the map number in its d
 3-> Easy
 4-> Room-shaped test map
 5-> No obstacles
+
 ![Figure4](https://github.com/davidabadp/IEEE_NavigationRobotsNNGA/assets/47812104/c9293dfe-f548-46a4-afe1-e11a7311cceb)
 ![Figure5](https://github.com/davidabadp/IEEE_NavigationRobotsNNGA/assets/47812104/fb1c9e2c-3e8e-4733-83bf-4bf356437c94)
 ![Figure6](https://github.com/davidabadp/IEEE_NavigationRobotsNNGA/assets/47812104/946269ea-e6e7-4ee1-b12f-343f46235fc9)
